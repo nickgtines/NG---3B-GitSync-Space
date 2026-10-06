@@ -1,0 +1,6 @@
+output = true
+route = "/hello-github"
+route_auth = "space"
+route_type = "webpage"
+title = "Hello Github"
+color = "sky"
