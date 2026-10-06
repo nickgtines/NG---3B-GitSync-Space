@@ -1,0 +1,6 @@
+color = "purple"
+output = true
+route = "/webhook-ingest"
+route_auth = "external_id:UtjROt_wN9MwJugHQMCYI"
+route_type = "webhook"
+title = "Webhook ingest"

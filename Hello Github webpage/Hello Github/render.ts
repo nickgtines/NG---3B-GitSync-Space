@@ -1,6 +1,10 @@
 const js = (await Bun.file('./bundle.js').text()).replaceAll('</script', '<\\/script');
 const css = await Bun.file('./output.css').text();
 const rawTitle = 'Hello Github';
+
+const payloadFile = Bun.file('/storage/webhook-payloads/latest.json');
+const payload = (await payloadFile.exists()) ? await payloadFile.text() : 'null';
+const payloadJson = payload.replaceAll('</script', '<\\/script');
 const basePath = process.env._3B_BRANCH_ID
   ? `/__3b/branch/${process.env._3B_BRANCH_ID}${process.env.ROUTE_PATH ?? ''}`
   : process.env.ROUTE_PATH ?? '';
@@ -18,6 +22,7 @@ console.log(`<!DOCTYPE html>
 <body>
   <div id="root"></div>
   <script>window.__ROUTE_PATH__=${JSON.stringify(basePath).replaceAll('</script', '<\\/script')};</script>
+  <script>window.__PAYLOAD__=${payloadJson};</script>
   <script type="module">${js}</script>
 </body>
 </html>`);
