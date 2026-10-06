@@ -12,25 +12,12 @@ RUN \
   chmod +x ./bun && \
   ./bun --version >/dev/null
 
-RUN \
-  --mount=type=cache,target=tailwindcss \
-  case $(uname -m) in x86_64) ARCH=linux-x64;; *) ARCH=linux-arm64;; esac && \
-  curl --proto '=https' --tlsv1.2 -fsSL -o ./tailwindcss "https://github.com/tailwindlabs/tailwindcss/releases/download/v4.2.2/tailwindcss-${ARCH}" && \
-  chmod +x ./tailwindcss
-
 COPY package.json .
 RUN \
   --mount=type=cache,target=node_modules \
   if [ -f package.json ]; then ./bun install; fi && \
   mkdir -p node_modules
 
-COPY . .
-RUN \
-  --mount=type=cache,target=bundle.js \
-  --mount=type=cache,target=output.css \
-  ./bun build ./mount.tsx --minify --target=browser --define 'process.env.NODE_ENV="production"' --outfile ./bundle.js && \
-  ./tailwindcss -i ./globals.css -o ./output.css --minify
+VOLUME ["webhook-payloads"]
 
-VOLUME ["webhook-payloads:ro"]
-
-CMD ./bun ./render.ts
+CMD ./bun ./script.ts
