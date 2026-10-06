@@ -1,0 +1,5 @@
+output = true
+color = "sky"
+route = "/hello-world"
+route_type = "webpage"
+title = "Hello World"
